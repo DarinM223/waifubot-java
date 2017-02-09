@@ -34,14 +34,14 @@ public class Main {
         RequestToken token = new RequestToken(keysConfig.accessToken, keysConfig.accessSecret);
         OAuthSignatureCalculator calc = new OAuthSignatureCalculator(key, token);
         BoundRequestBuilder request = client
-                .preparePost("https://stream.twitter.com/1.1/statuses/filter.json?track=trump")
+                .preparePost("https://stream.twitter.com/1.1/statuses/filter.json?track=waifu")
                 .setSignatureCalculator(calc);
         Gson gson = new Gson();
 
         TwitterUtils.streamingRequestToObservable(request)
                 .filter(s -> !s.trim().isEmpty())
                 .map(s -> gson.fromJson(s, Status.class))
-                .filter(s -> s.text != null && !s.text.trim().isEmpty())
+                .filter(s -> WaifuUtils.isWaifuStatus(s))
                 .subscribe(
                         status -> System.out.println(status),
                         err -> System.err.println("Error: " + err)
