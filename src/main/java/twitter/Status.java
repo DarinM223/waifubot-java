@@ -25,6 +25,14 @@ public class Status {
         this.replyStatusIdString = replyStatusIdString;
     }
 
+    /**
+     * Sends a reply to the given status. The reply text format will be "@screenName message"
+     * where screenName is the screen name of the user who posted the status and message is the reply message.
+     * @param client the http client that will send the reply request
+     * @param oauth the oauth authentication data
+     * @param message the message to reply
+     * @return an observable that results in an HTTP response when the reply request has finished.
+     */
     public Observable<Response> reply(AsyncHttpClient client, OAuthSignatureCalculator oauth, String message) {
         String replyText = "@" + this.user.screenName + " " + message;
 

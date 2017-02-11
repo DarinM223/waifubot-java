@@ -6,7 +6,6 @@ import org.asynchttpclient.oauth.ConsumerKey;
 import org.asynchttpclient.oauth.OAuthSignatureCalculator;
 import org.asynchttpclient.oauth.RequestToken;
 import twitter.Config;
-import twitter.ConfigParser;
 import twitter.Status;
 import twitter.TwitterUtils;
 
@@ -22,7 +21,7 @@ public class Main {
         String keysPath = args[0];
         Config keysConfig;
         try {
-            keysConfig = ConfigParser.parse(keysPath);
+            keysConfig = Config.parse(keysPath);
         } catch (Exception e) {
             System.err.println("Error parsing the configuration file");
             return;

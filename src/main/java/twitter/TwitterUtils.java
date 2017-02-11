@@ -8,6 +8,11 @@ import java.io.ByteArrayOutputStream;
 import static java.util.Objects.requireNonNull;
 
 public class TwitterUtils {
+    /**
+     * Converts an HTTP request builder into a stream of text.
+     * @param request the request builder to call the Twitter api
+     * @return an observable stream of text data returned from Twitter's streaming api
+     */
     public static Observable<String> streamingRequestToObservable(BoundRequestBuilder request) {
         requireNonNull(request);
 
