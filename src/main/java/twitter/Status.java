@@ -15,16 +15,18 @@ public class Status {
     @SerializedName("id") public final long id;
     @SerializedName("text") public final String text;
     @SerializedName("user") public final User user;
+    @SerializedName("in_reply_to_status_id_str") public final String replyStatusIdString;
 
-    public Status(String createdAt, int id, String text, User user) {
+    public Status(String createdAt, int id, String text, User user, String replyStatusIdString) {
         this.createdAt = requireNonNull(createdAt);
         this.id = id;
         this.text = requireNonNull(text);
         this.user = requireNonNull(user);
+        this.replyStatusIdString = replyStatusIdString;
     }
 
-    public Observable<Response> reply(AsyncHttpClient client, OAuthSignatureCalculator oauth) {
-        String replyText = "@" + this.user.screenName + " your waifu is shit!";
+    public Observable<Response> reply(AsyncHttpClient client, OAuthSignatureCalculator oauth, String message) {
+        String replyText = "@" + this.user.screenName + " " + message;
 
         BoundRequestBuilder request = client
                 .preparePost("https://api.twitter.com/1.1/statuses/update.json")

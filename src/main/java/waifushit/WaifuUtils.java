@@ -1,5 +1,7 @@
 package waifushit;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import twitter.Status;
 
 import java.util.HashSet;
@@ -8,12 +10,30 @@ import java.util.Set;
 import static java.util.Objects.requireNonNull;
 
 public class WaifuUtils {
-    private static final Set<String> dict;
+    private static final Set<String> describeWords;
+    private static final Set<String> waifuWords;
     static {
-        dict = new HashSet<>();
-        dict.add("my");
-        dict.add("mai");
-        dict.add("best");
+        describeWords = new HashSet<>();
+        describeWords.add("my");
+        describeWords.add("mai");
+        describeWords.add("best");
+
+        waifuWords = new HashSet<>();
+        waifuWords.add("girl");
+        waifuWords.add("waifu");
+    }
+
+    public static boolean isStatus(String text) {
+        if (text.trim().isEmpty()) {
+            return false;
+        }
+
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(text);
+
+        return element.getAsJsonObject().get("friends") == null
+                && element.getAsJsonObject().get("event") == null
+                && element.getAsJsonObject().get("delete") == null;
     }
 
     public static boolean isWaifuStatus(Status s) {
@@ -23,14 +43,24 @@ public class WaifuUtils {
             return false;
         }
 
-        boolean oneMatch = false;
-        for (String key : dict) {
-            if (s.text.contains(key)) {
-                oneMatch = true;
+        String status = s.text.toLowerCase();
+
+        boolean describeMatch = false;
+        for (String key : describeWords) {
+            if (status.contains(key)) {
+                describeMatch = true;
                 break;
             }
         }
 
-        return oneMatch;
+        boolean waifuMatch = false;
+        for (String key : waifuWords) {
+            if (status.contains(key)) {
+                waifuMatch = true;
+                break;
+            }
+        }
+
+        return describeMatch && waifuMatch;
     }
 }
